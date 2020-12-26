@@ -23,7 +23,11 @@ class Installer extends InstallerBase
     public function getInstallPath(PackageInterface $package): string
     {
         $installer = new CustomInstaller($package, $this->composer, $this->io);
-        $path = $installer->getInstallPath($package, $package->getType());
+        try {
+            $path = $installer->getInstallPath($package, $package->getType());
+        } catch (\InvalidArgumentException $e) {
+            $path = null;
+        }
 
         return $path ?: LibraryInstaller::getInstallPath($package);
     }
